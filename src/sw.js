@@ -2,7 +2,7 @@
 const {assets} = global.serviceWorkerOption;
 const CACHE_NAME = 'vivino-cache-v3';
 const URLS_TO_CACHE = self.serviceWorkerOption.assets;
-const URLS_TO_IGNORE = ['chrome-extension', 'sockjs-node', '/wines'];
+const URLS_TO_IGNORE = ['chrome-extension', 'sockjs-node'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(precache());
@@ -21,7 +21,6 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  console.log(event);
   event.respondWith(caches.open(CACHE_NAME).then((cache) => {
     return cache.match(event.request).then(function(response) {
       if (response) {
