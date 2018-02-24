@@ -20,7 +20,7 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   console.log(event);
-  event.respondWith(chaces.open(CACHE_NAME).then((cache) => {
+  event.respondWith(caches.open(CACHE_NAME).then((cache) => {
     return cache.match(event.request).then(function(response) {
       if (response) {
         return response;
