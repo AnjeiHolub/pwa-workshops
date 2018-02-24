@@ -116,6 +116,7 @@ module.exports = {
     new webpack.optimize.UglifyJsPlugin(),
     new ServiceWorkerWebpack({
       entry: paths.serviceWorker,
+      excludes: ['_redirect'],
     }),
   ],
 };
