@@ -1,0 +1,2 @@
+запускаем yarn start
+и заходим на localhost:4000

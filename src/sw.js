@@ -1,48 +1,51 @@
 
-const {assets} = global.serviceWorkerOption;
-const CACHE_NAME = 'vivino-cache-v3';
-const URLS_TO_CACHE = self.serviceWorkerOption.assets;
+const {assets} = global.serviceWorkerOption; //добавляем ассэтсы, то что мы добавили в manifest.json
+const CACHE_NAME = 'vivino-cache-v3'; //то как назовем кэш
+const URLS_TO_CACHE = self.serviceWorkerOption.assets; 
 const URLS_TO_IGNORE = ['chrome-extension', 'sockjs-node'];
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(precache());
+// 1 этап инсталл
+self.addEventListener('install', (event) => { //слушаем инасталяцию 
+  event.waitUntil(precache()); //подготавливаем кэш, то есть записываем из assets в кэш
 });
 
+// 2 этап активэйт
 self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) => {
+  event.waitUntil( // ожидаем (то что внутри делаем нужно когда меняем assets или меняем название нашего кэша, очищаем старый кэш
+                   // и устанавливаем новый
+    caches.keys().then((keys) => { // берем все ключи
       return Promise.all(
         keys
-          .filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
+          .filter(key => key !== CACHE_NAME) // фильтруем по нашему имени и получаем все названия ненужных кашей кроме нашего существующего
+          .map(key => caches.delete(key)) // проходимся по всем полченым ненужным ключам и удаляем их из caches
       );
     })
   );
 });
 
-self.addEventListener('fetch', (event) => {
-  event.respondWith(caches.open(CACHE_NAME).then((cache) => {
-    return cache.match(event.request).then(function(response) {
+self.addEventListener('fetch', (event) => { // перехватываем все запросы
+  event.respondWith(caches.open(CACHE_NAME).then((cache) => { // respondWith то есть берем контроль над запросами
+    return cache.match(event.request).then(function(response) { //
       if (response) {
         return response;
       }
 
-      if (!navigator.isOnline && isHtmlRequest(event.request)) {
+      if (!navigator.isOnline && isHtmlRequest(event.request)) { //если мы не онлайн и что то еще возвращаем нашу станицу index.html
         return cache.match(new Request('/index.html'));
       }
 
-      if (shouldIgnoreRequest(event.request)) {
-        return fetch(event.request);
+      if (shouldIgnoreRequest(event.request)) { //если не хотим ничего делать с запросом делаем обычный запрос fetch
+        return fetch(event.request); 
       }
 
-      return fetchAndUpdate(event.request);
+      return fetchAndUpdate(event.request); //делаем запрос и обновляем базу caches
     });
   }));
 });
 
 function precache() {
-  return caches.open(CACHE_NAME).then(function (cache) {
-    return cache.addAll(assets);
+  return caches.open(CACHE_NAME).then(function (cache) { //открываем кэш под именем CACHE_NAME и 
+    return cache.addAll(assets); // записываем туда assets
   });
 }
 

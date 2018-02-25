@@ -15,6 +15,7 @@ class ListItem extends PureComponent {
               <div className="ListItem__photo-container">
                 {this.props.image_url ? (
                   <img className="ListItem__photo" src={this.props.image_url} alt={this.props.name} />
+
                 ) : (
                   <BottleSvg className="ListItem__photo" />
                 )}

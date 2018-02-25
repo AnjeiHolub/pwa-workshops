@@ -7,6 +7,8 @@ import BottleSvg from '../../svg-components/Bottle';
 import ItemDetail from '../ItemDetail';
 import Nav from '../Nav';
 import './style.scss';
+import Picture from '../Picture';
+import {Helmet} from "react-helmet";
 
 const ItemShow = ({ match, items, history }) => {
   const item = items[match.params.id - 1];
@@ -17,6 +19,22 @@ const ItemShow = ({ match, items, history }) => {
 
   return (
       <article className="ItemShow">
+        <Helmet
+          htmlAttributes={{ lang: 'en', amp: undefined }}
+          title={item.name}
+          titleTemplate="Vivino.pl - %s"
+          meta={[
+            { name: 'description', content: item.grapes },
+            { property: 'fb:app_id', content: '' },
+            { property: 'og:url', content: window.location.href },
+            { property: 'og:title', content: item.title },
+            { property: 'og:type', content: 'article' },
+            { property: 'og:description', content: item.grapes },
+            { property: 'og:image', content: item.image_url },
+            { property: 'og:image:width', content: '694' },
+            { property: 'og:image:height', content: '390' },
+          ]}
+        />
         <Nav back title={item.name} annotation={`${item.color}, ${item.region}, ${item.country}`} />
 
         <div className="ItemShow__inner">
@@ -34,7 +52,7 @@ const ItemShow = ({ match, items, history }) => {
 
             <div className="ItemShow__image-wrapper">
               {item.image_url ? (
-                <img className="ItemShow__image" src={item.image_url} alt="wine" />
+                <Picture className="ItemShow__image" src={item.image_url} alt="wine" />
               ) : (
                 <BottleSvg className="ItemShow__image" />
               )}

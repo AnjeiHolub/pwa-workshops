@@ -1,9 +1,11 @@
+$font-stack: -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif;
+
 %font-default {
-  font-family: Roboto, serif;
+  font-family: $font-stack;
 }
 
 %font-distinguished {
-  font-family: Cabin, serif;
+  font-family: $font-stack;
 }
 
 $font-sizes: (
